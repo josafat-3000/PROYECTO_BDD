@@ -1,12 +1,17 @@
-/* App.css */
-html, body, #root {
-  height: 100%;
+body, html {
   margin: 0;
   padding: 0;
-}
-
-.app {
   height: 100%;
+}
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.app {
+  flex: 1;
+  display: flex;
+  flex-direction: column; 
 }
 
 .header {
@@ -21,7 +26,7 @@ html, body, #root {
 .content {
   padding: 20px; /* General padding */
   padding-top: 80px; /* Suficiente padding para evitar superposición con el header */
-  min-height: calc(100vh - 134px); /* Ajusta según el tamaño de tu Header y Footer */
+  
 }
 
 .landing {
@@ -36,26 +41,6 @@ html, body, #root {
 
 .landing .ant-btn {
   margin: 0 10px;
-}
-
-.primary-button {
-  background-color: #1DA57A;
-  border-color: #1DA57A;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  font-size: 16px;       /* Tamaño de la letra */
-  height: 50px;          /* Altura del botón */
-  width: 150px;          /* Anchura del botón */
-}
-
-.secondary-button {
-  background-color: #ffa940;
-  border-color: #ffa940;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  font-size: 16px;       /* Tamaño de la letra */
-  height: 50px;          /* Altura del botón */
-  width: 150px;          /* Anchura del botón */
 }
 
 .login-container {

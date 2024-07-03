@@ -1,31 +1,48 @@
-import React, { useState, useContext  } from 'react';
-import { Form, Input, Button, Typography } from 'antd';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
+import { Form, Input, Button, Typography, message } from 'antd';
 import { AuthContext } from "../context/auth";
 import { Link, useNavigate } from 'react-router-dom';
+import { loginUser } from '../api/user.js';
 
 const { Title } = Typography;
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setAuthState } = useContext(AuthContext);
+  const { authState, setAuthState } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    axios.post("http://localhost:3000/api/auth/login", values).then((response) => {
-      if (response.data.error) {
-        alert(response.data.error);
+    try {
+      const response = await loginUser(values);
+      console.log('Response:', response); // Verificar la respuesta
+      if (response.error) {
+        alert(response.error);
       } else {
-        localStorage.setItem("accessToken", response.data.token);
+        localStorage.setItem("accessToken", response.token);
+        
+        console.log('Before setAuthState:', authState); // Estado antes de actualizar
+        
         setAuthState({
-          username: response.data.username,
-          id: response.data.id,
+          correo: response.correo,
+          id: response.id,
           status: true,
+          rol: response.rol
         });
+
+        console.log('After setAuthState:', {
+          correo: response.correo,
+          id: response.id,
+          status: true,
+          
+        }); // Estado después de actualizar
+        
         navigate('/home');
       }
-    });
+    } catch (error) {
+      console.error("Failed to login:", error);
+      message.error("Failed to login");
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
