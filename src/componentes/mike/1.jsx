@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import ER from '../../assets/images/ER.png';
 
+
+import Arch from "./1a"
 const ModeloEntidadRelacion = () => {
   const [score, setScore] = useState(null);
   const [answers, setAnswers] = useState({
@@ -47,13 +50,9 @@ const ModeloEntidadRelacion = () => {
       </p>
 
       <h2>Ejemplo de Diagrama ER</h2>
-      <div style={styles.diagram}>
-        <img
-          src="ruta_a_tu_imagen_diagrama_er.png"
-          alt="Diagrama Entidad-Relación"
-          style={styles.image}
-        />
-      </div>
+      <div style={{ textAlign: 'center' }}>
+            <img src={ER} alt="INNER JOIN"  style={styles.centeredImage} />
+            </div>
 
       <h2>Componentes del Modelo ER</h2>
 
@@ -298,6 +297,9 @@ Relaciones:
         <button type="submit" style={styles.button}>Enviar</button>
       </form>
       {score !== null && <p>Tu puntuación es: {score}/4</p>}
+
+      <Arch/>
+
     </div>
   );
 };
@@ -339,6 +341,13 @@ const styles = {
     borderRadius: '4px',
     cursor: 'pointer',
   },
+  centeredImage: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '100%',
+    maxHeight: '100%'
+},
 };
 
 export default ModeloEntidadRelacion;

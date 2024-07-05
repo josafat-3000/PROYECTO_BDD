@@ -1,5 +1,95 @@
 import React, { useState } from 'react';
 import correctAnswers from './answers.json';
+import departamentos from '../../../assets/images/departamentos.png';
+import empleados from '../../../assets/images/empleados.png';
+//import full from '../../../assets/images/full.png';
+import inner_join from '../../../assets/images/inner_join.png';
+import join_resultado from '../../../assets/images/join_resultado.png';
+//import left_excluding from '../../../assets/images/left_excluding.png';
+import left_resultado from '../../../assets/images/left_resultado.png';
+import left from '../../../assets/images/left.png';
+//import right_excluding from '../../../assets/images/right_excluding.png';
+import right_resultado from '../../../assets/images/right_resultado.png';
+import right from '../../../assets/images/right.png';
+
+const productos = [
+    { id: 1, nombre: 'Producto 1', categoria_id: 1, proveedor_id: 1 },
+    { id: 2, nombre: 'Producto 2', categoria_id: 3, proveedor_id: 2 },
+    { id: 3, nombre: 'Producto 3', categoria_id: 2, proveedor_id: 1 },
+];
+
+const categorias = [
+    { id: 1, nombre: 'Categoría 1' },
+    { id: 2, nombre: 'Categoría 2' },
+    { id: 3, nombre: 'Categoría 3' },
+];
+
+const proveedores = [
+    { id: 1, nombre: 'Proveedor 1' },
+    { id: 2, nombre: 'Proveedor 2' },
+    { id: 3, nombre: 'Proveedor 3' },
+];
+
+const executeQuery = (query) => {
+    let result = [];
+
+    if (query.includes('LEFT JOIN categorias')) {
+        result = productos.map(p => ({
+            ...p,
+            categoria: categorias.find(c => c.id === p.categoria_id) || null
+        }));
+    } else if (query.includes('LEFT JOIN productos')) {
+        result = categorias.map(c => ({
+            ...c,
+            productos: productos.filter(p => p.categoria_id === c.id) || null
+        }));
+    } else if (query.includes('LEFT JOIN proveedores')) {
+        result = productos.map(p => ({
+            ...p,
+            proveedor: proveedores.find(pr => pr.id === p.proveedor_id) || null
+        }));
+    } else if (query.includes('RIGHT JOIN productos')) {
+        result = proveedores.map(pr => ({
+            ...pr,
+            productos: productos.filter(p => p.proveedor_id === pr.id) || null
+        }));
+    } else if (query.includes('LEFT JOIN categorias') && query.includes('LEFT JOIN proveedores')) {
+        result = productos.map(p => ({
+            ...p,
+            categoria: categorias.find(c => c.id === p.categoria_id) || null,
+            proveedor: proveedores.find(pr => pr.id === p.proveedor_id) || null
+        }));
+    }
+
+    return result;
+};
+
+const renderTable = (data) => {
+    if (!data || data.length === 0) return <p>No hay datos para mostrar</p>;
+
+    const headers = Object.keys(data[0]);
+
+    return (
+        <table>
+            <thead>
+                <tr>
+                    {headers.map((header, index) => (
+                        <th key={index}>{header}</th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                {data.map((row, index) => (
+                    <tr key={index}>
+                        {headers.map((header, idx) => (
+                            <td key={idx}>{JSON.stringify(row[header], null, 2)}</td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+};
 
 const Quiz = () => {
     const [answers, setAnswers] = useState({
@@ -11,6 +101,7 @@ const Quiz = () => {
     });
 
     const [score, setScore] = useState(null);
+    const [results, setResults] = useState({});
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -33,16 +124,27 @@ const Quiz = () => {
         const calculatedScore = (correctCount / Object.keys(correctAnswers).length) * 10;
         setScore(calculatedScore);
 
+        // Ejecuta las consultas ingresadas por el usuario
+        const queryResults = {};
+        for (const [key, value] of Object.entries(answers)) {
+            try {
+                const result = executeQuery(value);
+                queryResults[key] = result;
+            } catch (error) {
+                queryResults[key] = error.message;
+            }
+        }
+        setResults(queryResults);
+
         // Convierte las respuestas a JSON
         const answersJSON = JSON.stringify(answers);
         console.log(answersJSON);
-
-        // Aquí podrías enviar las respuestas a un servidor, almacenarlas localmente, etc.
     };
 
+
     return (
-        <div className="quiz">
-            <h1>Operación JOIN</h1>
+        <div className="quiz" style={styles.container}>
+            <h1 style={styles.header}>Operación JOIN</h1>
             <h2>Introducción</h2>
             <p>
                 La función JOIN en SQL se utiliza para combinar filas de dos o más tablas basadas en una columna relacionada entre ellas. Es una operación fundamental 
@@ -77,23 +179,27 @@ const Quiz = () => {
             <p>
                 Se representa mediante el operador de 'Unión natural' u operador de combinación.
             </p>
-            <img src="inner_join.png" alt="INNER JOIN" />
-
+            <div style={{ textAlign: 'center' }}>
+            <img src={inner_join} alt="INNER JOIN"  style={styles.centeredImage} />
+            </div>
             <h4>Ejemplo práctico</h4>
             <p>
                 Se definen dos tablas: Empleados (nombre y departamento) y Departamentos (ID y Nombre).
             </p>
-            <div className="inline-images">
-                <img src="empleados.png" alt="Empleados" width="245" height="115" />
-                <img src="departamentos.png" alt="Departamentos" width="245" height="115" />
+            
+            <div style={{ textAlign: 'center' }}>
+                <img src={empleados} alt="Empleados" width="245" height="115" />
+                <img src={departamentos} alt="Departamentos" width="245" height="115" />
             </div>
+            
 
             <p>
                 Al realizar el JOIN entre ambas tablas, donde existe relación entre Id y Departamentoid da como resultado:
             </p>
             <p><strong>SELECT</strong> * <strong>FROM</strong> Empleados E <strong>JOIN</strong> Departamentos D <strong>ON</strong> E.DepartamentoId = D.Id</p>
-            <img src="join_resultado.png" alt="Resultado JOIN" width="245" height="115" />
-
+            <div style={{ textAlign: 'center' }}>
+            <img src={join_resultado} alt="Resultado JOIN" width="245" height="115" />
+            </div>
 
             <h3>LEFT JOIN</h3>
             <p>
@@ -126,7 +232,10 @@ const Quiz = () => {
                 Si no existe ninguna coincidencia para alguna de las filas de la tabla de la izquierda, de igual forma todos los resultados de la primera tabla se 
                 muestran.
             </p>
-            <img src="left.png" alt="LEFT JOIN" />
+            <div style={{ textAlign: 'center' }}>
+            <img src={left} alt="LEFT JOIN" />
+            </div>
+            
             <h4>Ejemplo práctico</h4>
             <p>
                 La tabla Empleados es la primera tabla en aparecer en la consulta (en el FROM), por lo tanto ésta es la tabla LEFT (izquierda), y todas sus filas 
@@ -136,14 +245,16 @@ const Quiz = () => {
                 La tabla Departamentos es la tabla de la derecha (aparece luego del LEFT JOIN). Por lo tanto, si se encuentran coincidencias, se mostrarán los 
                 valores correspondientes, pero sino, aparecerá NULL en los resultados.
             </p>
-            <div className="inline-images">
-                <img src="empleados.png" alt="Empleados" width="245" height="115" />
-                <img src="departamentos.png" alt="Departamentos" width="245" height="115" />
+            <div style={{ textAlign: 'center'}}>
+                <img src={empleados} alt="Empleados" width="245" height="115" />
+                <img src={departamentos} alt="Departamentos" width="245" height="115" />
             </div>
             <p><strong>SELECT</strong> E.Nombre <strong>as</strong> 'Empleado', D.Nombre <strong>as</strong> 'Departamento' <strong>FROM</strong> Empleados E 
             <strong>LEFT JOIN</strong> Departamentos D <strong>ON</strong> E.DepartamentoId = D.Id</p>
-            <img src="left_resultado.png" alt="Resultado LEFT JOIN" width="245" height="115" />
-
+           
+            <div style={{ textAlign: 'center'}}>           
+            <img src={left_resultado} alt="Resultado LEFT JOIN" width="245" height="115" />
+            </div>
 
             <h3>RIGHT JOIN</h3>    
             <p>
@@ -173,7 +284,9 @@ const Quiz = () => {
                 Se representa mediante el operador de combinación externa derecha. En el RIGHT JOIN, se da prioridad a la tabla de la derecha, y buscamos 
                 en la tabla izquierda.
             </p>
-            <img src="right.png" alt="RIGHT JOIN" />
+            <div style={{ textAlign: 'center'}}>
+            <img src={right} alt="RIGHT JOIN" />
+            </div>
             <h4>Ejemplo práctico</h4>
             <p>
                 La tabla Empleados es la tabla de la derecha y todas sus filas se mostrarán en los resultados.
@@ -182,13 +295,16 @@ const Quiz = () => {
                 La tabla Departamentos es la tabla de la izquierda (aparece luego del RIGHT JOIN). Si se encuentran coincidencias, se mostrarán los 
                 valores correspondientes, pero sino, aparecerá NULL en los resultados.
             </p>
-            <div className="inline-images">
-                <img src="empleados.png" alt="Empleados" width="245" height="115" />
-                <img src="departamentos.png" alt="Departamentos" width="245" height="115" />
+            <div style={{ textAlign: 'center'}}>
+                <img src={empleados} alt="Empleados" width="245" height="115" />
+                <img src={departamentos} alt="Departamentos" width="245" height="115" />
             </div>
             <p><strong>SELECT</strong> E.Nombre <strong>as</strong> 'Empleado', D.Nombre <strong>as</strong> 'Departamento' <strong>FROM</strong> Empleados E 
             <strong>RIGHT JOIN</strong> Departamentos D <strong>ON</strong> E.DepartamentoId = D.Id</p>
-            <img src="right_resultado.png" alt="Resultado RIGHT JOIN" width="245" height="115" />
+            <div style={{ textAlign: 'center'}}>
+            <img src={right_resultado} alt="Resultado RIGHT JOIN" width="245" height="115" />
+            </div>
+            
 
             <h3>Referencias</h3>
             <ul>
@@ -197,69 +313,145 @@ const Quiz = () => {
                 <li>Navathe, Shamkant B., y Elmasri, Ramez. Fundamentos de Sistemas de Bases de Datos. Pearson Educación, 2015.</li>
             </ul>
 
-            <h1>Preguntas de Opción Múltiple</h1>
+            <h1 style={styles.header}>Cuestionario sobre Consultas SQL con JOINs</h1>
+            <p>De acuerdoa las siguientes tablas, contestar las preguntas</p>
+            <div>
+                <h2>Tabla: Productos</h2>
+                {renderTable(productos)}
+                <h2>Tabla: Categorías</h2>
+                {renderTable(categorias)}
+                <h2>Tabla: Proveedores</h2>
+                {renderTable(proveedores)}
+            </div>
+            <br></br>
             <form onSubmit={handleSubmit}>
-                <label>
-                    1. ¿Cuál es el propósito principal del comando INNER JOIN?
-                    <select name="p1" value={answers.p1} onChange={handleChange}>
-                        <option value="">Seleccione una opción</option>
-                        <option value="a">Combinar filas de dos tablas, devolviendo todas las filas de la tabla izquierda y las filas coincidentes de la tabla derecha.</option>
-                        <option value="b">Combinar filas de dos tablas, devolviendo todas las filas de la tabla derecha y las filas coincidentes de la tabla izquierda.</option>
-                        <option value="c">Combinar filas de dos tablas, devolviendo solo las filas que tienen valores coincidentes en las columnas especificadas.</option>
-                    </select>
-                </label>
-                <br />
-
-                <label>
-                    2. ¿Qué tipo de JOIN devolverá todas las filas de la tabla de la izquierda, y las filas coincidentes de la tabla de la derecha?
-                    <select name="p2" value={answers.p2} onChange={handleChange}>
-                        <option value="">Seleccione una opción</option>
-                        <option value="a">INNER JOIN</option>
-                        <option value="b">LEFT JOIN</option>
-                        <option value="c">RIGHT JOIN</option>
-                    </select>
-                </label>
-                <br />
-
-                <label>
-                    3. ¿Qué tipo de JOIN devolverá todas las filas de la tabla de la derecha, y las filas coincidentes de la tabla de la izquierda?
-                    <select name="p3" value={answers.p3} onChange={handleChange}>
-                        <option value="">Seleccione una opción</option>
-                        <option value="a">INNER JOIN</option>
-                        <option value="b">LEFT JOIN</option>
-                        <option value="c">RIGHT JOIN</option>
-                    </select>
-                </label>
-                <br />
-
-                <label>
-                    4. En un LEFT JOIN, ¿qué sucede si no hay coincidencia para alguna fila de la tabla izquierda?
-                    <select name="p4" value={answers.p4} onChange={handleChange}>
-                        <option value="">Seleccione una opción</option>
-                        <option value="a">La fila se descarta.</option>
-                        <option value="b">La fila se combina con valores NULL en las columnas de la tabla derecha.</option>
-                        <option value="c">La fila se combina con valores NULL en las columnas de la tabla izquierda.</option>
-                    </select>
-                </label>
-                <br />
-
-                <label>
-                    5. En un RIGHT JOIN, ¿qué sucede si no hay coincidencia para alguna fila de la tabla derecha?
-                    <select name="p5" value={answers.p5} onChange={handleChange}>
-                        <option value="">Seleccione una opción</option>
-                        <option value="a">La fila se descarta.</option>
-                        <option value="b">La fila se combina con valores NULL en las columnas de la tabla izquierda.</option>
-                        <option value="c">La fila se combina con valores NULL en las columnas de la tabla derecha.</option>
-                    </select>
-                </label>
-                <br />
-
-                <button type="submit">Enviar</button>
+                <div style={styles.question}>
+                    <label style={styles.label}>
+                        1. Escribe una consulta SQL para obtener todos los productos y sus respectivas categorías, incluyendo los productos que no tienen categoría.
+                        <br></br>
+                        <input
+                            type="text"
+                            name="p1"
+                            value={answers.p1}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        2. Escribe una consulta SQL para obtener todas las categorías y los productos que pertenecen a cada una, incluyendo las categorías que no tienen productos.
+                        <br></br>
+                        <input
+                            type="text"
+                            name="p2"
+                            value={answers.p2}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        3. Escribe una consulta SQL para obtener todos los productos y sus respectivos proveedores, incluyendo los productos que no tienen proveedores.
+                        <br></br>
+                        <input
+                            type="text"
+                            name="p3"
+                            value={answers.p3}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        4. Escribe una consulta SQL para obtener todos los proveedores y los productos que suministran, incluyendo los proveedores que no tienen productos.
+                        <br></br>
+                        <input
+                            type="text"
+                            name="p4"
+                            value={answers.p4}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        5. Escribe una consulta SQL para obtener todos los productos, sus categorías y sus proveedores, incluyendo los productos que no tienen categorías ni proveedores.
+                        <br></br>
+                        <input
+                            type="text"
+                            name="p5"
+                            value={answers.p5}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
+                <button type="submit" style={styles.button}>Enviar</button>
             </form>
 
-            {score !== null && <p>Tu puntuación es: {score.toFixed(2)}</p>}
+            {score !== null && <p>Tu puntuación es: {score.toFixed(2)}/10</p>}
+
+            {Object.keys(results).length > 0 && (
+                <div>
+                    <h2>Resultados de las Consultas</h2>
+                    {Object.entries(results).map(([key, result]) => (
+                        <div key={key}>
+                            <h3>Consulta {key}</h3>
+                            {renderTable(result)}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
+
+const styles = {
+    container: {
+      maxWidth: '800px',
+      margin: '0 auto',
+      background: '#fff',
+      padding: '20px',
+      borderRadius: '8px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    },
+    header: {
+      textAlign: 'center',
+    },
+    diagram: {
+      textAlign: 'center',
+      marginBottom: '20px',
+    },
+    image: {
+      maxWidth: '100%',
+      height: 'auto',
+    },
+    question: {
+      marginBottom: '20px',
+    },
+    label: {
+      display: 'block',
+      marginBottom: '8px',
+    },
+    button: {
+      display: 'block',
+      width: '100%',
+      padding: '10px',
+      backgroundColor: '#4CAF50',
+      color: 'white',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+    },
+
+    centeredImage: {
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        maxWidth: '100%',
+        maxHeight: '100%'
+    },
+  };
+
+
 
 export default Quiz;

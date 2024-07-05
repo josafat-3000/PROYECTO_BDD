@@ -10,7 +10,7 @@ import Cinco from "./mike/5";
 import Seis from "./erick/6/6";
 import Siete from "./mike/7";
 import Ocho from "./josa/8";
-import Nueve from "./josa/9";
+import Nueve from "./mike/9"
 
 const ViewPractica = () => {
   const { id } = useParams();

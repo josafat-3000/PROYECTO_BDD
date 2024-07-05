@@ -1,7 +1,8 @@
 {
-    "p1": "Devolver todas las filas de las tablas con valores coincidentes en las columnas especificadas.",
-    "p2": "Operador de Combinación.",
-    "p3": "Se muestra la fila con valores NULL en las columnas de la tabla derecha.",
-    "p4": "Devolver todas las filas de la tabla de la derecha y las filas coincidentes de la tabla de la izquierda.",
-    "p5": "Operador de Unión natural."
+    "p1": "SELECT * FROM productos LEFT JOIN categorias ON productos.categoria_id = categorias.id;",
+    "p2": "SELECT * FROM categorias LEFT JOIN productos ON categorias.id = productos.categoria_id;",
+    "p3": "SELECT * FROM productos LEFT JOIN proveedores ON productos.proveedor_id = proveedores.id;",
+    "p4": "SELECT * FROM proveedores LEFT JOIN productos ON proveedores.id = productos.proveedor_id;",
+    "p5": "SELECT * FROM productos LEFT JOIN categorias ON productos.categoria_id = categorias.id LEFT JOIN proveedores ON productos.proveedor_id = proveedores.id;"
 }
+

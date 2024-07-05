@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Tabla from "./5a";
+import { Row, Col } from 'antd';
 
 const ConsultasSQLCentralizadas = () => {
   const [score, setScore] = useState(null);
@@ -306,6 +308,16 @@ const ConsultasSQLCentralizadas = () => {
         <button type="submit" style={styles.button}>Enviar</button>
       </form>
       {score !== null && <p>Tu puntuación es: {score}/6</p>}
+      <Row justify="center" align="middle" style={{ height: '100vh' }}>
+      <Col>
+        {/* Tu componente a centrar */}
+        <div style={{ padding: '20px', background: '#fafafa', textAlign: 'center' }}>
+        <Tabla/>
+        </div>
+      </Col>
+    </Row>
+ 
+  
     </div>
   );
 };

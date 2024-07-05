@@ -78,6 +78,7 @@ export const createPractice = async (practiceData) => {
 };
 
 export const updatePractica = async (id, updatedPractica) => {
+  console.log(updatedPractica)
   try {
     const response = await axios.patch(`${API_URL}/practices/${id}`, updatedPractica,{
       headers: { accessToken: localStorage.getItem("accessToken") },

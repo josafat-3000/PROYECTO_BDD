@@ -58,6 +58,23 @@ const  adan = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>Cuestionario de repaso</h1>
+
+      <p>
+          Un sistema de bases de datos distribuidos almacena datos en múltiples ubicaciones físicas. 
+          Las diferencias entre sistemas distribuidos y centralizados incluyen ubicación de datos, 
+          tolerancia a fallos y control de concurrencia. Las configuraciones básicas en sistemas
+          distribuidos son particiones independientes con posibilidad de una central. La transparencia 
+          implica ocultar la complejidad del sistema al usuario. Las siglas DDBMS significan Sistema de 
+          Gestión de Bases de Datos Distribuidas. La disponibilidad se refiere a garantizar que los datos 
+          estén accesibles cuando se necesiten. La fiabilidad en este contexto es mantener la integridad 
+          de los datos frente a fallos. Un esquema que requiere consultar datos pasando por todos los nodos
+          carece de autonomía local, independencia de operación e independencia de red. La fragmentación
+          de datos implica dividir una base en fragmentos distribuidos en diferentes servidores. Los 
+          propósitos incluyen mejorar rendimiento, disponibilidad, escalabilidad y seguridad. La diferencia
+          principal entre fragmentación horizontal y vertical es que la horizontal divide por filas y la 
+          vertical por columnas.
+      </p>
+
       <form onSubmit={handleSubmit}>
         <div style={styles.question}>
 

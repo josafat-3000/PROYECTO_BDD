@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const  adan = () => {
+const Adan = () => {
   const [score, setScore] = useState(null);
   const [answers, setAnswers] = useState({
     q1: '',
@@ -13,24 +13,14 @@ const  adan = () => {
     q8: '',
     q9: '',
     q10: '',
-});
+  });
 
   const handleChange = (event) => {
-    const { name, value, type, checked } = event.target;
-
-    if (type === 'checkbox') {
-      setAnswers((prevAnswers) => {
-        const updatedAnswers = prevAnswers[name].includes(value)
-          ? prevAnswers[name].filter((answer) => answer !== value)
-          : [...prevAnswers[name], value];
-        return { ...prevAnswers, [name]: updatedAnswers };
-      });
-    } else {
-      setAnswers({
-        ...answers,
-        [name]: value,
-      });
-    }
+    const { name, value } = event.target;
+    setAnswers({
+      ...answers,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (event) => {
@@ -43,13 +33,11 @@ const  adan = () => {
     if (answers.q4 === 'b') newScore++;
     if (answers.q5 === 'b') newScore++;
     if (answers.q6 === 'b') newScore++;
-    if (answers.q7 === 'a') newScore++; //NO AGGREGADO
-    if (answers.q8 === 'b') newScore++;
+    if (answers.q7 === 'a') newScore++;
+    if (answers.q8 === 'a') newScore++;
     if (answers.q9 === 'a') newScore++;
     if (answers.q10 === 'b') newScore++;
-/**
-    if (JSON.stringify(answers.q3.sort()) === JSON.stringify(['a', 'c'])) newScore++;
- */
+
     setScore(newScore);
   };
 
@@ -57,28 +45,27 @@ const  adan = () => {
     <div style={styles.container}>
       <h1 style={styles.header}>Comparativa entre BD centralizadas vs BD Distribuidas</h1>
 
-    <p>
-    Un sistema de bases de datos distribuidas (DDBMS) es aquel en el que los datos están almacenados 
-    en múltiples ubicaciones físicas. A continuación se presentan las principales diferencias 
-    entre sistemas de bases de datos distribuidas y centralizadas, como la ubicación de datos, tolerancia a 
-    fallos y control de concurrencia. Las configuraciones básicas en un sistema de bases de datos distribuidas 
-    incluyen particiones independientes y la posibilidad de una central. La transparencia en este contexto 
-    implica ocultar la complejidad del sistema al usuario. Las siglas DDBMS significan Sistema de Gestión de Bases de Datos Distribuidas .
-    En términos de disponibilidad, se refiere a la capacidad del sistema para garantizar que los datos estén
-     accesibles y disponibles para los usuarios cuando lo necesiten. mientras que la fiabilidad se 
-    relaciona con la capacidad del sistema para mantener la integridad y consistencia de los datos a pesar 
-    de fallos o errores. La fragmentación de datos es el proceso de dividir una base de datos en fragmentos 
-    distribuidos en diferentes servidores. Los propósitos de la fragmentación incluyen mejorar el rendimiento, la disponibilidad, la escalabilidad y la seguridad 
-    Finalmente, la principal diferencia entre la fragmentación horizontal y vertical es que la horizontal 
-    divide por filas y la vertical por columnas.
-    </p>
+      <p>
+        Un sistema de bases de datos distribuidas (DDBMS) es aquel en el que los datos están almacenados
+        en múltiples ubicaciones físicas. A continuación se presentan las principales diferencias
+        entre sistemas de bases de datos distribuidas y centralizadas, como la ubicación de datos, tolerancia a
+        fallos y control de concurrencia. Las configuraciones básicas en un sistema de bases de datos distribuidas
+        incluyen particiones independientes y la posibilidad de una central. La transparencia en este contexto
+        implica ocultar la complejidad del sistema al usuario. Las siglas DDBMS significan Sistema de Gestión de Bases de Datos Distribuidas.
+        En términos de disponibilidad, se refiere a la capacidad del sistema para garantizar que los datos estén
+        accesibles y disponibles para los usuarios cuando lo necesiten. Mientras que la fiabilidad se
+        relaciona con la capacidad del sistema para mantener la integridad y consistencia de los datos a pesar
+        de fallos o errores. La fragmentación de datos es el proceso de dividir una base de datos en fragmentos
+        distribuidos en diferentes servidores. Los propósitos de la fragmentación incluyen mejorar el rendimiento, la disponibilidad, la escalabilidad y la seguridad.
+        Finalmente, la principal diferencia entre la fragmentación horizontal y vertical es que la horizontal
+        divide por filas y la vertical por columnas.
+      </p>
 
-      <h2>Cuestionario.</h2>
+      <h2>Cuestionario</h2>
 
       <form onSubmit={handleSubmit}>
         <div style={styles.question}>
-
-    <p>1. Ubicación de los datos de BD Distribuidas.</p>
+          <p>1. Ubicación de los datos de BD Distribuidas.</p>
           <label style={styles.label}>
             <input
               type="radio"
@@ -87,9 +74,8 @@ const  adan = () => {
               checked={answers.q1 === 'a'}
               onChange={handleChange}
             />
-             a) Distribuidos en múultiples nodos
+            a) Distribuidos en múltiples nodos
           </label>
-
           <label style={styles.label}>
             <input
               type="radio"
@@ -98,18 +84,18 @@ const  adan = () => {
               checked={answers.q1 === 'b'}
               onChange={handleChange}
             />
-             b) Almacenados en un solo servidor
+            b) Almacenados en un solo servidor
           </label>
         </div>
 
         <div style={styles.question}>
-    <p>2. Ubicación de los datos de BD Centralizadas.</p>
+          <p>2. Ubicación de los datos de BD Centralizadas.</p>
           <label style={styles.label}>
             <input
               type="radio"
               name="q2"
               value="a"
-              checked={answers.q2 === 'a'} //CORRECTA
+              checked={answers.q2 === 'a'}
               onChange={handleChange}
             />
             a) Almacenados en un solo servidor
@@ -122,12 +108,12 @@ const  adan = () => {
               checked={answers.q2 === 'b'}
               onChange={handleChange}
             />
-            b) Distribuidos en múultiples nodos
+            b) Distribuidos en múltiples nodos
           </label>
         </div>
-          
+
         <div style={styles.question}>
-    <p>3. ¿Qué escalabilidad tienen laa BD Distribuidas?</p>
+          <p>3. ¿Qué escalabilidad tienen la BD Distribuidas?</p>
           <label style={styles.label}>
             <input
               type="radio"
@@ -136,7 +122,7 @@ const  adan = () => {
               checked={answers.q3 === 'a'}
               onChange={handleChange}
             />
-            a) Escalabilidad horizontal yvertical
+            a) Escalabilidad horizontal y vertical
           </label>
           <label style={styles.label}>
             <input
@@ -150,21 +136,17 @@ const  adan = () => {
           </label>
         </div>
 
-        
-	  
-        * 
-
         <div style={styles.question}>
-    <p>4. ¿Qué escalabilidad tienen laa BD Centralizada?</p>
+          <p>4. ¿Qué escalabilidad tienen la BD Centralizada?</p>
           <label style={styles.label}>
             <input
               type="radio"
               name="q4"
               value="a"
-              checked={answers.q4 === 'a'} 
+              checked={answers.q4 === 'a'}
               onChange={handleChange}
             />
-            a) Escalabilidad horizontal yvertical
+            a) Escalabilidad horizontal y vertical
           </label>
           <label style={styles.label}>
             <input
@@ -176,11 +158,10 @@ const  adan = () => {
             />
             b) Principalmente vertical
           </label>
-
         </div>
 
         <div style={styles.question}>
-    <p>5. ¿Cuál de las dos Bases de Datos tiene más tolerancia a fallos?</p>
+          <p>5. ¿Cuál de las dos Bases de Datos tiene más tolerancia a fallos?</p>
           <label style={styles.label}>
             <input
               type="radio"
@@ -199,13 +180,12 @@ const  adan = () => {
               checked={answers.q5 === 'b'}
               onChange={handleChange}
             />
-            b) SDistribuidas
+            b) Distribuidas
           </label>
-
         </div>
 
-                  <div style={styles.question}>
-    <p>6. ¿Cuál de las dos Bases de Datos tiene mayor rendimiento?</p>
+        <div style={styles.question}>
+          <p>6. ¿Cuál de las dos Bases de Datos tiene mayor rendimiento?</p>
           <label style={styles.label}>
             <input
               type="radio"
@@ -221,22 +201,21 @@ const  adan = () => {
               type="radio"
               name="q6"
               value="b"
-              checked={answers.q6 === 'b'} //CORRECTA
+              checked={answers.q6 === 'b'}
               onChange={handleChange}
             />
             b) Distribuidas
           </label>
-
         </div>
 
         <div style={styles.question}>
-    <p>7. ¿Cuál de las dos Bases de Datos es más costosa respecto a infraestructura?</p>
+          <p>7. ¿Cuál de las dos Bases de Datos es más costosa respecto a infraestructura?</p>
           <label style={styles.label}>
             <input
               type="radio"
               name="q7"
               value="a"
-              checked={answers.q7 === 'a'} //CORRECTA
+              checked={answers.q7 === 'a'}
               onChange={handleChange}
             />
             a) Distribuidas
@@ -254,13 +233,13 @@ const  adan = () => {
         </div>
 
         <div style={styles.question}>
-    <p>8. ¿Cuál de las dos Bases de Datos tiene mayor consistencia de datos?</p>
+          <p>8. ¿Cuál de las dos Bases de Datos tiene mayor consistencia de datos?</p>
           <label style={styles.label}>
             <input
               type="radio"
               name="q8"
               value="a"
-              checked={answers.q8 === 'a'} //CORRECTA
+              checked={answers.q8 === 'a'}
               onChange={handleChange}
             />
             a) Centralizadas
@@ -275,11 +254,10 @@ const  adan = () => {
             />
             b) Distribuidas
           </label>
-
         </div>
 
         <div style={styles.question}>
-    <p>9. ¿Cuál de las dos Bases de Datos es más compleja en cuestión gestión?</p>
+          <p>9. ¿Cuál de las dos Bases de Datos es más compleja en cuestión de gestión?</p>
           <label style={styles.label}>
             <input
               type="radio"
@@ -300,12 +278,10 @@ const  adan = () => {
             />
             b) Centralizadas
           </label>
-
         </div>
 
-
         <div style={styles.question}>
-    <p>10. ¿Cuál de las dos Bases de Datos tiene mayor seguridad?</p>
+          <p>10. ¿Cuál de las dos Bases de Datos tiene mayor seguridad?</p>
           <label style={styles.label}>
             <input
               type="radio"
@@ -321,12 +297,11 @@ const  adan = () => {
               type="radio"
               name="q10"
               value="b"
-              checked={answers.q10 === 'b'}//CORRECTA
+              checked={answers.q10 === 'b'}
               onChange={handleChange}
             />
             b) Distribuidas
           </label>
-
         </div>
 
         <button type="submit" style={styles.button}>Enviar</button>
@@ -370,4 +345,4 @@ const styles = {
   },
 };
 
-export default adan;
+export default Adan;

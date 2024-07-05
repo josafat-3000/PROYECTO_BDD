@@ -30,6 +30,7 @@ const EditPractica = () => {
   const handleSubmit = async (values) => {
     try {
       await updatePractica(id, { calificacion: values.calificacion });
+      console.log(values.calificacion)
       navigate(`/practicas/view/${id}`);
     } catch (error) {
       setError('Error updating practica');
